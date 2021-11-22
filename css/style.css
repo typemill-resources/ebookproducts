@@ -1,0 +1,37 @@
+.ebookproduct{
+	width:  100%;
+	display:  flex;
+	flex-wrap:  wrap;
+	margin:  1rem 0;
+	border: 1px solid lightgray;
+	padding:  2rem;
+}
+.ebookproductimage{
+	width: 40%;
+}
+.ebookproductimage img{
+	width:  100%;
+	object-fit: cover;
+}
+.ebookproducttext{
+	width: 60%;
+	padding:  0 0 0 2rem;
+	position:  relative;
+}
+.ebookproducttext h2{
+	margin-top: 0px;
+	padding-top: 0px;
+}
+.ebookproductaction{
+	position:  absolute;
+	bottom:  0;
+	left: 2rem;
+	right: 0;
+}
+.ebookproductaction a{
+	display: block;
+	width: 100%;
+	padding: .5rem;
+	margin: 1rem 0 0;
+	text-align: center;
+}
