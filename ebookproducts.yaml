@@ -1,5 +1,8 @@
 name: ebookproducts
 version: 1.0.0
-description: Create product-cards for your ebooks and integrate them anywhere with a shortcode
-author: trendschau
+description: Create product-boxes for your eBooks and integrate them anywhere with a shortcode
+author: Sebastian Schürmanns
+homepage: https://trendschau.net
 licence: MIT
+paypal: https://paypal.me/typemill
+amount: 10

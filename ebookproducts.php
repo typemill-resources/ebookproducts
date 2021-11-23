@@ -33,16 +33,16 @@ class ebookproducts extends Plugin
 	# add new navi-items into the admin settings
 	public function onSystemnaviLoaded($navidata)
 	{
-		$this->addSvgSymbol('<symbol id="icon-undo" viewBox="0 0 32 32"><path d="M16 2c-4.418 0-8.418 1.791-11.313 4.687l-4.686-4.687v12h12l-4.485-4.485c2.172-2.172 5.172-3.515 8.485-3.515 6.627 0 12 5.373 12 12 0 3.584-1.572 6.801-4.063 9l2.646 3c3.322-2.932 5.417-7.221 5.417-12 0-8.837-7.163-16-16-16z"></path></symbol>');
+		$this->addSvgSymbol('<symbol id="icon-download" viewBox="0 0 24 24"><path d="M20 15v4c0 0.276-0.111 0.525-0.293 0.707s-0.431 0.293-0.707 0.293h-14c-0.276 0-0.525-0.111-0.707-0.293s-0.293-0.431-0.293-0.707v-4c0-0.552-0.448-1-1-1s-1 0.448-1 1v4c0 0.828 0.337 1.58 0.879 2.121s1.293 0.879 2.121 0.879h14c0.828 0 1.58-0.337 2.121-0.879s0.879-1.293 0.879-2.121v-4c0-0.552-0.448-1-1-1s-1 0.448-1 1zM13 12.586v-9.586c0-0.552-0.448-1-1-1s-1 0.448-1 1v9.586l-3.293-3.293c-0.391-0.391-1.024-0.391-1.414 0s-0.391 1.024 0 1.414l5 5c0.092 0.092 0.202 0.166 0.324 0.217s0.253 0.076 0.383 0.076c0.256 0 0.512-0.098 0.707-0.293l5-5c0.391-0.391 0.391-1.024 0-1.414s-1.024-0.391-1.414 0z"></path></symbol>');
 
 		$navi = $navidata->getData();
 
-		$navi['ebookproducts'] 		= ['routename' => 'ebookproducts.show', 'icon' => 'icon-undo', 'aclresource' => 'system', 'aclprivilege' => 'view'];
+		$navi['Ebookproducts'] 		= ['routename' => 'ebookproducts.show', 'icon' => 'icon-download', 'aclresource' => 'system', 'aclprivilege' => 'view'];
 
 		# set the navigation item active
 		if(trim($this->getPath(),"/") == 'tm/ebookproducts')
 		{
-			$navi['ebookproducts']['active'] = true;
+			$navi['Ebookproducts']['active'] = true;
 		}
 
 		$navidata->setData($navi);

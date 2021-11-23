@@ -15,8 +15,9 @@ let ebookproducts = new Vue({
  	template: '<div class="noclass">' +
 				'<div class="mv4">' + 
 					'<label for="productid">ID for new product</label>' +
- 					'<input name="productid" v-model="newproductid" type="text">' +
+ 					'<input name="productid" v-model="newproductid" @input="cleanup()" type="text">' +
  					'<button class="link bn br2 bg-tm-green white absolute dim pointer right-2 pa3" @click.prevent="addProduct()">add product</button>' +
+ 					'<div><small>Only charackters a-z are allowed</small></div>' +
 				'</div>' +
  				'<form id="" @submit.prevent="submitstep">' +
 					'<div v-if="formdata" v-for="(product,productname) in formdata">' + 
@@ -39,9 +40,6 @@ let ebookproducts = new Vue({
 	mounted: function(){
 
 		FormBus.$on('forminput', formdata => {
-			console.info(this.currentproduct);
-			console.info(formdata.name);
-			console.info(formdata.value);
 			this.$set(this.formdata[this.currentproduct], formdata.name, formdata.value);
 		});
 
@@ -129,6 +127,10 @@ let ebookproducts = new Vue({
 	    });
 	},
 	methods: {
+		cleanup: function()
+		{
+			this.newproductid = this.newproductid.toLowerCase().replace(/[^a-zA-Z]+/g, "");
+		},
 		addProduct: function()
 		{
 			var newproduct = {[this.newproductid] :  {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  }};
