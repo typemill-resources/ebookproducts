@@ -4,6 +4,7 @@ namespace Plugins\ebookproducts;
 
 use \Typemill\Plugin;
 use Typemill\Models\WriteYaml;
+use Typemill\Models\Validation;
 
 
 class ebookproducts extends Plugin
@@ -52,7 +53,29 @@ class ebookproducts extends Plugin
 	{
 		$shortcodeArray = $shortcode->getData();
 
-		if($shortcodeArray['name'] == 'ebookproduct' && isset($shortcodeArray['params']['id']))
+		if(is_array($shortcodeArray) && $shortcodeArray['name'] == 'registershortcode')
+		{
+			$settings 		= $this->getSettings();
+			$folderName 	= 'data' . DIRECTORY_SEPARATOR . 'ebookproducts';
+			$folder 		= $settings['rootPath'] . $folderName;
+			$writeYaml 		= new WriteYaml();
+			$ebookproducts 	= $writeYaml->getYaml($folderName, 'ebookproducts.yaml');
+			$content 		= [];
+
+			if($ebookproducts)
+			{
+				foreach($ebookproducts as $key => $value)
+				{
+					$content[] = $key;
+				}
+			}
+
+			$shortcodeArray['data']['ebookproduct'] = [ 'id' => ['content' => $content] ];
+
+			$shortcode->setData($shortcodeArray);
+		}
+
+		if(is_array($shortcodeArray) && $shortcodeArray['name'] == 'ebookproduct' && isset($shortcodeArray['params']['id']))
 		{
 	        $this->addCSS('/ebookproducts/css/style.css');
 
@@ -62,7 +85,7 @@ class ebookproducts extends Plugin
 			$folderName 	= 'data' . DIRECTORY_SEPARATOR . 'ebookproducts';
 			$folder 		= $settings['rootPath'] . $folderName;
 
-			if(!$this->checkEbookFolder($folder))
+			if(!$this->checkFolder($folder))
 			{
 				return $response->withJson(array('data' => false, 'errors' => ['message' => 'Please make sure that the folder data/ebookproducts exists and is writable.']), 500);
 			}
@@ -190,7 +213,7 @@ class ebookproducts extends Plugin
 		$folderName 	= 'data' . DIRECTORY_SEPARATOR . 'ebookproducts';
 		$folder 		= $settings['rootPath'] . $folderName;
 
-		if(!$this->checkEbookFolder($folder))
+		if(!$this->checkFolder($folder))
 		{
 			return $response->withJson(array('data' => false, 'errors' => ['message' => 'Please make sure that the folder data/ebookproducts exists and is writable.']), 500);
 		}
@@ -215,7 +238,7 @@ class ebookproducts extends Plugin
 		$folderName 	= 'data' . DIRECTORY_SEPARATOR . 'ebookproducts';
 		$folder 		= $settings['rootPath'] . $folderName;
 
-		if(!$this->checkEbookFolder($folder))
+		if(!$this->checkFolder($folder))
 		{
 			return $response->withJson(array('data' => false, 'errors' => ['message' => 'Please make sure that the folder data/ebooks exists and is writable.']), 500);
 		}
@@ -223,12 +246,26 @@ class ebookproducts extends Plugin
 		# create objects to read and write data
 		$writeYaml 		= new WriteYaml();
 
-#		$validatedParams = $this->validateEbookData($params, $writeYaml);
+		$validationErrors = $this->validateData($params);
 
-#		if(isset($validatedParams['errors']))
-#		{
-#			return $response->withJson(array('data' => false, 'errors' => $validatedParams['errors']), 422);
-#		}
+		if(!empty($validationErrors))
+		{
+			$errors = [];
+			# prepare error data for vue frontend 
+			foreach($params['ebookproducts'] as $id => $productdata)
+			{
+				$errors[$id] = false;
+				if(isset($validationErrors[$id]))
+				{
+					foreach($validationErrors[$id] as $fieldname => $errormessages)
+					{
+						# only use the first error message for each field
+						$errors[$id][$fieldname] = $errormessages[0];
+					}
+				}
+			}
+			return $response->withJson($errors, 422);
+		}
 		
 		# write params
 		$ebookproducts 	= $writeYaml->updateYaml($folderName, 'ebookproducts.yaml', $params['ebookproducts']);
@@ -241,7 +278,53 @@ class ebookproducts extends Plugin
 		return $response->withJson(array('data' => false, 'errors' => ['message' => 'We could not store all data. Please try again.']), 500);
 	}
 
-	private function checkEbookFolder($folder)
+	private function validateData($params)
+	{
+		$ebookproducts	= isset($params['ebookproducts']) ? $params['ebookproducts'] : false;
+		$errors			= [];
+
+		# create validation object
+		$validation	= new Validation();
+
+		foreach($ebookproducts as $id => $productdata)
+		{
+	
+			# return standard valitron object for standardfields
+			$v = $validation->returnValidator($productdata);
+
+			$v->rule('noHTML', 'title');
+			$v->rule('lengthMax', 'title',200);
+			$v->rule('noHTML', 'cover');
+			$v->rule('lengthMax', 'cover',200);
+			$v->rule('noHTML', 'description');
+			$v->rule('lengthMax', 'description',2000);
+			$v->rule('noHTML', 'downloadlabel1');
+			$v->rule('lengthMax', 'downloadlabel1',50);
+			$v->rule('noHTML', 'downloadurl1');
+			$v->rule('lengthMax', 'downloadurl1',200);
+			$v->rule('noHTML', 'downloadlabel2');
+			$v->rule('lengthMax', 'downloadlabel2',50);
+			$v->rule('noHTML', 'downloadurl2');
+			$v->rule('lengthMax', 'downloadurl2',200);
+			$v->rule('noHTML', 'noaccesslabel1');
+			$v->rule('lengthMax', 'noaccesslabel1',50);
+			$v->rule('noHTML', 'noaccessurl1');
+			$v->rule('lengthMax', 'noaccessurl1',200);
+			$v->rule('noHTML', 'noaccesslabel2');
+			$v->rule('lengthMax', 'noaccesslabel2',50);
+			$v->rule('noHTML', 'noaccessurl2');
+			$v->rule('lengthMax', 'noaccessurl2',200);
+
+			if(!$v->validate())
+			{
+				$errors[$id] = $v->errors();
+			}
+		}
+
+		return $errors;
+	}
+
+	private function checkFolder($folder)
 	{
 
 		if(!file_exists($folder) && !is_dir( $folder ))
