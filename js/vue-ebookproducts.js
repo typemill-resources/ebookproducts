@@ -1,5 +1,3 @@
-const FormBus = new Vue();
-
 let ebookproducts = new Vue({
 	el: "#ebookproducts",
 	data: function () {
