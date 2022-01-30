@@ -131,7 +131,7 @@ class ebookproducts extends Plugin
 						$noaccess = true;
 					}
 				}
-				else
+				elseif($downloadurl1)
 				{
 					# the file is not restricted
 					$html .= '<a class="button" href="' . $base_url . '/'  . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
@@ -151,7 +151,7 @@ class ebookproducts extends Plugin
 						$noaccess = true;
 					}
 				}
-				else
+				elseif($downloadurl2)
 				{
 					# the file is not restricted
 					$html .= '<a class="button" href="' . $base_url . '/' . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
