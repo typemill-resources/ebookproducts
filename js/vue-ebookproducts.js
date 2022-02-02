@@ -40,9 +40,11 @@ let ebookproducts = new Vue({
 					  	'</fieldset>' +
 					'</div>' +
 				'</form>' +
-		        '<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div>' +
-		        '<div v-if="haserrors()" class="mb2 mt2"><div class="metaErrors">Please correct the errors above</div></div>' +				
-				'<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button>' +
+				'<div v-if="Object.keys(formdata).length > 0">' +
+			        '<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div>' +
+			        '<div v-if="haserrors()" class="mb2 mt2"><div class="metaErrors">Please correct the errors above</div></div>' +				
+					'<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button>' +
+				'</div>' +
  			  '</div>',	
 	mounted: function(){
 
