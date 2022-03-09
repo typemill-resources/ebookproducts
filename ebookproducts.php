@@ -123,7 +123,7 @@ class ebookproducts extends Plugin
 					if(isset($_SESSION['role']) && ($_SESSION['role'] == 'administrator' OR $_SESSION['role'] == $restrictions[$downloadurl1] OR $this->container->acl->inheritsRole($_SESSION['role'], $restrictions[$downloadurl1])) )
 					{
 						# user is allowed to download the file
-						$html .= '<a class="button" href="' . $base_url . '/' . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
+						$html .= '<a download class="button" href="' . $base_url . '/' . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
 					}
 					else
 					{
@@ -134,7 +134,7 @@ class ebookproducts extends Plugin
 				elseif($downloadurl1)
 				{
 					# the file is not restricted
-					$html .= '<a class="button" href="' . $base_url . '/'  . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
+					$html .= '<a download class="button" href="' . $base_url . '/'  . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
 				}
 
 				if($restrictions && $downloadurl2 && isset($restrictions[$downloadurl2]))
@@ -143,7 +143,7 @@ class ebookproducts extends Plugin
 					if(isset($_SESSION['role']) && ($_SESSION['role'] == 'administrator' OR $_SESSION['role'] == $restrictions[$downloadurl1] OR $this->container->acl->inheritsRole($_SESSION['role'], $restrictions[$downloadurl2])) )
 					{
 						# user is allowed to download the file
-						$html .= '<a class="button" href="' . $base_url . '/'  . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
+						$html .= '<a download class="button" href="' . $base_url . '/'  . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
 					}
 					else
 					{
@@ -154,7 +154,7 @@ class ebookproducts extends Plugin
 				elseif($downloadurl2)
 				{
 					# the file is not restricted
-					$html .= '<a class="button" href="' . $base_url . '/' . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
+					$html .= '<a download class="button" href="' . $base_url . '/' . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
 				}
 
 				# if user has no access to one or more download-files
@@ -162,11 +162,11 @@ class ebookproducts extends Plugin
 				{
 					if($noaccessurl1)
 					{ 
-						$html .= '<a class="button" href="' . $noaccessurl1 . '">' . $noaccesslabel1 . '</a>';
+						$html .= '<a download class="button" href="' . $noaccessurl1 . '">' . $noaccesslabel1 . '</a>';
 					}
 					if($noaccessurl2)
 					{ 
-						$html .= '<a class="button" href="' . $noaccessurl2 . '">' . $noaccesslabel2 . '</a>';
+						$html .= '<a download class="button" href="' . $noaccessurl2 . '">' . $noaccesslabel2 . '</a>';
 					}
 				}
 
