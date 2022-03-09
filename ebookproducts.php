@@ -102,7 +102,7 @@ class ebookproducts extends Plugin
 				$html .= '<div class="ebookproductimage"><img src="' . $base_url . '/' . $ebookproducts[$id]['cover'] . '"></div>';
 				$html .= '<div class="ebookproducttext">';
 				$html .= '<h2>' . $ebookproducts[$id]['title'] . '</h2>'; 
-				$html .= '<p>' . $ebookproducts[$id]['description'] . '</p>';
+				$html .= '<p>' . $this->markdownToHtml($ebookproducts[$id]['description']) . '</p>';
 
 				$downloadlabel1		= ( isset($ebookproducts[$id]['downloadlabel1']) && $ebookproducts[$id]['downloadlabel1'] != '') ? $ebookproducts[$id]['downloadlabel1'] : false;
 				$downloadurl1  		= ( isset($ebookproducts[$id]['downloadurl1']) && $ebookproducts[$id]['downloadurl1'] != '' ) ? $ebookproducts[$id]['downloadurl1'] : false;
