@@ -10,6 +10,7 @@ let ebookproducts = new Vue({
 			errors: [],
 			defaulterrors: [],
 			saved: false,
+			globalerror: false
 		}
 	},
  	template: '<div class="noclass" v-cloack>' +
@@ -17,7 +18,7 @@ let ebookproducts = new Vue({
 					'<label for="productid">ID for new product</label>' +
  					'<input name="productid" v-model="newproductid" @input="cleanup()" type="text">' +
  					'<button class="link bn br2 bg-tm-green white absolute dim pointer right-2 pa3" @click.prevent="addProduct()">add product</button>' +
- 					'<div><small>Only charackters a-z are allowed</small></div>' +
+ 					'<div><small v-if="globalerror" class="red">{{ globalerror }}</small><small v-else>Only charackters a-z are allowed</small></div>' +
 			        '<div class="mt3 mb3">' +
 						'<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button>' +
 				        '<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div>' +
@@ -159,11 +160,25 @@ let ebookproducts = new Vue({
 		},
 		addProduct: function()
 		{
-			this.saved 		= false;
-			this.errors 	= this.defaulterrors;
+			if(this.newproductid.trim() == '')
+			{
+				this.globalerror = 'Please add a product id.';
+				return;
+			}
+
+			if(this.formdata[this.newproductid])
+			{
+				this.globalerror = 'The id already exists.';
+				return;
+			}
+
+			this.globalerror 	= false;
+			this.saved 			= false;
+			this.errors 		= this.defaulterrors;
 			
-			var oldproducts = this.formdata;
-			var newproduct 	= {};
+			var oldproducts 	= this.formdata;
+			var newproduct 		= {};
+
 			newproduct[this.newproductid] = {};
 			newproduct[this.newproductid].title = '';
 			newproduct[this.newproductid].cover = '';
@@ -179,44 +194,7 @@ let ebookproducts = new Vue({
 
 			this.formdata 	= allproducts;
 			this.createdefaulterrors();
-			console.info(this.formdata);
 
-/*			products.unshift(newproduct);
-
-			this.formdata = products;
-			this.createdefaulterrors();
-			console.info(this.formdata);
-
-/*    		WORKS
-			var products = this.formdata;
-			products[this.newproductid] = {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  };
-			this.formdata = products;
-			this.createdefaulterrors();
-			console.info(this.formdata);
-
-/*			products[this.newproductid] = {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  };
-			var allproducts = {[this.newproductid] :  {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  }, ...this.formdata};
-			this.formdata = allproducts;
-			console.info(allproducts);
-			/*
-			var oldproducts = this.formdata;
-			var allproducts = {[this.newproductid] :  {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  }};
-
-			this.formdata = Object.assign({}, newproduct, products);
-			this.createdefaulterrors();
-			console.info(this.formdata);
-
-/*
-			products[this.newproductid] = {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  };
-			this.formdata = products;
-			this.createdefaulterrors();
-			console.info(this.formdata);
-
-/*			var newproduct = {[this.newproductid] :  {'title' : '','cover' : '','description' : '','downloadlabel' : '', 'downloadurl' : '','firstbuttonlabel' : '','firstbuttonurl' : '','secondbuttonlabel' : '','secondbuttonurl' : ''  }};
-			console.info(newproduct);
-			this.formdata = Object.assign({}, newproduct, this.formdata);
-			console.info(this.formdata);
-*/
 			this.newproductid = '';
 		},
 		deleteProduct: function(productname)
