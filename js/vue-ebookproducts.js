@@ -13,40 +13,42 @@ let ebookproducts = new Vue({
 			globalerror: false
 		}
 	},
- 	template: '<div class="noclass" v-cloack>' +
-				'<div class="mv4">' + 
-					'<label for="productid">ID for new product</label>' +
- 					'<input name="productid" v-model="newproductid" @input="cleanup()" type="text">' +
- 					'<button class="link bn br2 bg-tm-green white absolute dim pointer right-2 pa3" @click.prevent="addProduct()">add product</button>' +
- 					'<div><small v-if="globalerror" class="red">{{ globalerror }}</small><small v-else>Only charackters a-z are allowed</small></div>' +
-			        '<div class="mt3 mb3">' +
-						'<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button>' +
-				        '<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div>' +
-				        '<div v-if="haserrors()" class="mb2 mt2"><div class="metaErrors">Please correct the errors below</div></div>' +	
-					'</div>' +
-				'</div>' +
- 				'<form id="" @submit.prevent="submitstep">' +
-					'<div v-if="formdata" v-for="(product,productname) in formdata">' + 
-						'<fieldset class="ba b--moon-gray pa3 mb3" @click="currentproduct = productname">' +
-							'<legend class="b pa2 f4">ID: {{ productname }}</legend>' + 
-							'<component v-for="(fielddefinition, fieldname) in productform"' +
-			            	    	' :key="fieldname"' +
-			                		' :is="selectComponent(fielddefinition)"' +
-			                		' :errors="errors[productname]"' +
-			                		' :name="fieldname"' +
-			                		' v-model="formdata[productname][fieldname]"' +
-			                		' v-bind="fielddefinition">' +
-							'</component>' + 
-					  		'<button @click.prevent="deleteProduct(productname)" class="link bn br1 bg-tm-red white dim ph4 pv2 right mr4">delete product</button>' +
-					  	'</fieldset>' +
-					'</div>' +
-				'</form>' +
-				'<div v-if="Object.keys(formdata).length > 0">' +
-			        '<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div>' +
-			        '<div v-if="haserrors()" class="mb2 mt2"><div class="metaErrors">Please correct the errors above</div></div>' +				
-					'<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button>' +
-				'</div>' +
- 			  '</div>',	
+ 	template: `
+	 <div class="noclass" v-cloack> 
+		<div class="mv4">  
+			<label for="productid">ID for new product</label> 
+			<input name="productid" v-model="newproductid" @input="cleanup()" type="text"> 
+			<button class="link bn br2 bg-tm-green white absolute dim pointer right-2 pa3" @click.prevent="addProduct()">add product</button> 
+			<div><small>Only characters a-z are allowed</small></div> 
+			<div class="mt3 mb3"> 
+				<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button> 
+				<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div> 
+				<div v-if="haserrors()" class="mb2 mt2"><div class="metaErrors">Please correct the errors below</div></div> 	
+			</div> 
+		</div> 
+		<form id="" @submit.prevent="submitstep"> 
+			<div v-if="formdata" v-for="(product,productname) in formdata">  
+				<fieldset class="ba b--moon-gray pa3 mb3" @click="currentproduct = productname"> 
+					<legend class="b pa2 f4">ID: {{ productname }}</legend>  
+					<component v-for="(fielddefinition, fieldname) in productform" 
+							:key="fieldname" 
+							:is="selectComponent(fielddefinition)" 
+							:errors="errors[productname]" 
+							:name="fieldname" 
+							v-model="formdata[productname][fieldname]" 
+							v-bind="fielddefinition"> 
+					</component>  
+					<button @click.prevent="deleteProduct(productname)" class="link bn br1 bg-tm-red white dim ph4 pv2 right mr4">delete product</button> 
+				</fieldset> 
+			</div> 
+		</form> 
+		<div v-if="Object.keys(formdata).length > 0"> 
+			<div v-if="saved" class="mb2 mt2"><div class="metaSuccess">Saved successfully</div></div> 
+			<div v-if="haserrors()" class="mb2 mt2"><div class="metaErrors">Please correct the errors above</div></div> 				
+			<button @click.prevent="submit()" class="link w-100 bn br2 pa3 bg-tm-green white dim" type="submit">Save products</button> 
+		</div> 
+	</div>	 
+	 `,
 	mounted: function(){
 
 		FormBus.$on('forminput', formdata => {
