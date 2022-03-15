@@ -116,14 +116,17 @@ class ebookproducts extends Plugin
 				$restrictions 		= $writeYaml->getYaml('media' . DIRECTORY_SEPARATOR . 'files', 'filerestrictions.yaml');
 				$noaccess 			= false;
 
+
+				$download1Fragment = '<a download class="button" href="' . $base_url . '/' . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
+				$download2Fragment = '<a download class="button" href="' . $base_url . '/'  . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
 				$html .= '<div class="ebookproductaction">';
 				if($restrictions && $downloadurl1 && isset($restrictions[$downloadurl1]))
 				{
 					# the first download is restricted
 					if(isset($_SESSION['role']) && ($_SESSION['role'] == 'administrator' OR $_SESSION['role'] == $restrictions[$downloadurl1] OR $this->container->acl->inheritsRole($_SESSION['role'], $restrictions[$downloadurl1])) )
 					{
-						# user is allowed to download the file
-						$html .= '<a download class="button" href="' . $base_url . '/' . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
+						# user is allowed to download the file, show Link
+						$html .= $download1Fragment;
 					}
 					else
 					{
@@ -133,8 +136,8 @@ class ebookproducts extends Plugin
 				}
 				elseif($downloadurl1)
 				{
-					# the file is not restricted
-					$html .= '<a download class="button" href="' . $base_url . '/'  . $downloadurl1 . '">' . $downloadlabel1 . '</a>';
+					# the file is not restricted, show Link
+					$html .= $download1Fragment;
 				}
 
 				if($restrictions && $downloadurl2 && isset($restrictions[$downloadurl2]))
@@ -143,7 +146,7 @@ class ebookproducts extends Plugin
 					if(isset($_SESSION['role']) && ($_SESSION['role'] == 'administrator' OR $_SESSION['role'] == $restrictions[$downloadurl1] OR $this->container->acl->inheritsRole($_SESSION['role'], $restrictions[$downloadurl2])) )
 					{
 						# user is allowed to download the file
-						$html .= '<a download class="button" href="' . $base_url . '/'  . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
+						$html .= $download2Fragment;
 					}
 					else
 					{
@@ -154,7 +157,7 @@ class ebookproducts extends Plugin
 				elseif($downloadurl2)
 				{
 					# the file is not restricted
-					$html .= '<a download class="button" href="' . $base_url . '/' . $downloadurl2 . '">' . $downloadlabel2 . '</a>';
+					$html .= $download2Fragment;
 				}
 
 				# if user has no access to one or more download-files
